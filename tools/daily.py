@@ -28,6 +28,7 @@ SUBJECT_REPO = "narko4u/witnessos-verifier"
 SUBJECT_TREE = pathlib.Path("/home/vault/work/witnessos-verifier")
 BASE_PYTHON = "/home/vault/work/witnessos-verifier/.venv/bin/python"
 RECIPE = "python -m venv .venv && .venv/bin/pip install -e . pytest && .venv/bin/python -m pytest -q"
+TZ = dt.timezone(dt.timedelta(hours=10))  # Australia/Brisbane, no daylight saving
 
 
 def run(cmd, cwd=None, env=None, timeout=600):
@@ -44,7 +45,7 @@ def export_commit(sha: str, dest: pathlib.Path) -> pathlib.Path:
 
 
 def main() -> int:
-    today = dt.datetime.now().astimezone().date().isoformat()
+    today = dt.datetime.now(TZ).date().isoformat()
     existing = receipt.ROOT / "receipts" / f"{today}.json"
     if existing.exists() and "--force" not in sys.argv:
         draft = receipt.ROOT / "queue" / f"{today}.txt"
@@ -73,6 +74,7 @@ def main() -> int:
         pyver = run([str(venv / "bin/python"), "-c", "import platform;print(platform.python_version())"]).stdout.strip()
     payload = {
         "schema": "agent-receipt/v1",
+        "issued_at": dt.datetime.now(TZ).isoformat(timespec="seconds"),
         "issuer": "Security Division, Empire Labs Pty Ltd",
         "agent": "sovereign",
         "subject": {
