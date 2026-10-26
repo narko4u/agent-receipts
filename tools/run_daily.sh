@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
-# Produce today's receipt, commit it, push it. Nothing here posts anywhere.
-set -euo pipefail
+# Produce today's receipt, commit it, push it, then emit the draft post.
+# Nothing here posts anywhere. stdout is what the cron delivery shows the owner.
+set -uo pipefail
 cd /home/vault/work/agent-receipts
 mkdir -p logs
+day=$(date +%F)
+
 python3 tools/daily.py >> logs/daily.log 2>&1
-python3 tools/verify.py --gh >> logs/daily.log 2>&1
-git add -A
-if git diff --cached --quiet; then
-  echo "no new receipt" >> logs/daily.log
-  exit 0
+daily_rc=$?
+python3 tools/verify.py --gh >> logs/daily.log 2>&1 || true
+
+if [ -n "$(git status --porcelain)" ]; then
+  git add -A
+  git commit -qm "receipt: $day" >> logs/daily.log 2>&1
+  git push -q origin main >> logs/daily.log 2>&1
 fi
-git commit -qm "receipt: $(date +%F)" >> logs/daily.log 2>&1
-git push -q origin main >> logs/daily.log 2>&1
-echo "pushed $(date -Is)" >> logs/daily.log
-# stdout is the delivery: today's draft post, for approval before anything is posted
-cat "queue/$(date +%F).txt" 2>/dev/null || true
+
+if [ ! -f "queue/$day.txt" ]; then
+  echo "agent-receipts: no receipt for $day (daily.py exit $daily_rc), see logs/daily.log"
+  exit 1
+fi
+
+cat "queue/$day.txt"
