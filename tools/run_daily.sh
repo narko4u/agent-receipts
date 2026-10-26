@@ -13,3 +13,5 @@ fi
 git commit -qm "receipt: $(date +%F)" >> logs/daily.log 2>&1
 git push -q origin main >> logs/daily.log 2>&1
 echo "pushed $(date -Is)" >> logs/daily.log
+# stdout is the delivery: today's draft post, for approval before anything is posted
+cat "queue/$(date +%F).txt" 2>/dev/null || true
