@@ -18,7 +18,7 @@
         "scope": "clean export of the commit, fresh virtual environment, no working tree changes"
       }
     ],
-    "issued_at": "2026-10-26T01:22:35+00:00",
+    "issued_at": "2026-10-26T01:23:56+00:00",
     "issuer": "Security Division, Empire Labs Pty Ltd",
     "limits": "This record states what the agent observed at that commit. It does not prove the software is correct, complete or secure, and it says nothing about any other commit.",
     "prev": null,
@@ -33,6 +33,6 @@
   "signature": {
     "alg": "ed25519",
     "key_id": "receipt-signing-v1",
-    "sig_b64": "v9SDyJFrTHfaVs6pdeVt3VoEuN6PmyRMBU3NoNc2aWb2xENQ7aNQjx5ae5WNey2U6Wd3RyyaWaDMWSCUU1NMDA=="
+    "sig_b64": "/fFFRJYZOow18s6iaRRlb2TKimeZsov4BZ2oZo/QksLTwcIpzqTLcBj3gQCJoRxJURLDnhEDXo15KROobivaDw=="
   }
 }

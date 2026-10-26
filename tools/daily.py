@@ -11,6 +11,7 @@ Reproduce with:
   .venv/bin/pip install -e . pytest
   .venv/bin/python -m pytest -q
 """
+import datetime as dt
 import json
 import pathlib
 import platform
@@ -43,6 +44,12 @@ def export_commit(sha: str, dest: pathlib.Path) -> pathlib.Path:
 
 
 def main() -> int:
+    today = dt.datetime.now().astimezone().date().isoformat()
+    existing = receipt.ROOT / "receipts" / f"{today}.json"
+    if existing.exists() and "--force" not in sys.argv:
+        draft = receipt.ROOT / "queue" / f"{today}.txt"
+        print(draft.read_text(encoding="utf-8").strip() if draft.exists() else f"{today}: receipt already issued")
+        return 0
     sha = run(["git", "rev-parse", "HEAD"], SUBJECT_TREE).stdout.strip()
     with tempfile.TemporaryDirectory() as tmp:
         tree = export_commit(sha, pathlib.Path(tmp))

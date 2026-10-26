@@ -1,0 +1,6 @@
+/home/vault/work/agent-receipts/receipts/2026-10-26.json
+{"passed": 321, "failed": 0, "skipped": 0, "exit_code": 0}
+2026-10-26 receipt #2: commit e395c0f in witnessos-verifier, built from a clean export, 321 passed, 0 failed, 0 skipped. Signed, chained to the previous day, repeatable: github.com/narko4u/agent-receipts
+[203 chars]
+FAIL 2026-10-26.json seq=2 sig=True chain=False seq_contiguous=False commit_exists=True
+1 checked, 1 failed
