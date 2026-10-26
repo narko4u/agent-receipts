@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Produce today's receipt, commit it, push it, then emit the draft post.
-# Nothing here posts anywhere. stdout is what the cron delivery shows the owner.
+# Produce today's receipt, commit it, push it, publish it behind a gate.
+# stdout is what the cron delivery shows the owner: the draft, and what happened.
 set -uo pipefail
 cd /home/vault/work/agent-receipts
 mkdir -p logs
@@ -21,4 +21,19 @@ if [ ! -f "queue/$day.txt" ]; then
   exit 1
 fi
 
-cat "queue/$day.txt"
+if [ -f "queue/$day.posted" ]; then
+  status="already posted id=$(cat "queue/$day.posted")"
+else
+  python3 tools/post.py "queue/$day.txt" >> logs/post.log 2>&1
+  rc=$?
+  case $rc in
+    0) id=$(grep -o 'id=[0-9]*' logs/post.log | tail -1 | cut -d= -f2)
+       echo "$id" > "queue/$day.posted"
+       status="posted id=$id" ;;
+    2) status="gate refused, see logs/post.log" ;;
+    3) status="not posted: X credits depleted" ;;
+    *) status="not posted: error rc=$rc, see logs/post.log" ;;
+  esac
+fi
+
+printf '%s\n\n%s\n' "$(cat "queue/$day.txt")" "status: $status"
