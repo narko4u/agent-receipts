@@ -1,0 +1,38 @@
+{
+  "payload": {
+    "agent": "sovereign",
+    "claims": [
+      {
+        "environment": {
+          "platform": "linux",
+          "python": "3.13.13"
+        },
+        "kind": "test_suite",
+        "observed": {
+          "exit_code": 0,
+          "failed": 0,
+          "passed": 321,
+          "skipped": 0
+        },
+        "recipe": "python -m venv .venv && .venv/bin/pip install -e . pytest && .venv/bin/python -m pytest -q",
+        "scope": "clean export of the commit, fresh virtual environment, no working tree changes"
+      }
+    ],
+    "issued_at": "2026-10-27T07:00:38+10:00",
+    "issuer": "Security Division, Empire Labs Pty Ltd",
+    "limits": "This record states what the agent observed at that commit. It does not prove the software is correct, complete or secure, and it says nothing about any other commit.",
+    "prev": "sha256:f41a3da3bc1ae5fdd0409ece8bcd466be1d3aa867255fb710d0331cd55117eae",
+    "schema": "agent-receipt/v1",
+    "seq": 2,
+    "subject": {
+      "commit": "e395c0f8095a43e860ac654e5641b23dc1812101",
+      "repo": "narko4u/witnessos-verifier",
+      "url": "https://github.com/narko4u/witnessos-verifier/commit/e395c0f8095a43e860ac654e5641b23dc1812101"
+    }
+  },
+  "signature": {
+    "alg": "ed25519",
+    "key_id": "receipt-signing-v1",
+    "sig_b64": "qgV0CJLEa/E/+wY9rfzX6hi2p344/78tytCgrhG29ZY2vRBXB8/ZxA+5FeWwr/jjfKHU/Wey0Keln4aXfwcwBA=="
+  }
+}
